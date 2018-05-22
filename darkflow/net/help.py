@@ -6,7 +6,7 @@ from time import time as timer
 import tensorflow as tf
 import numpy as np
 import sys
-import cv2
+#import cv2
 import os
 
 old_graph_msg = 'Resolving old graph def {} (no guarantee)'
@@ -157,9 +157,16 @@ def to_darknet(self):
 
     with self.graph.as_default() as g:
         for var in tf.global_variables():
+            print(var)
             name = var.name.split(':')[0]
             var_name = name.split('-')
-            l_idx = int(var_name[0])
+            print(name, var_name)
+            try:
+                l_idx = int(var_name[0])
+            except:
+                l_idx = 0
+                var_name = ['0', var_name[0]]
+                print('modified {} to {}'.format(name, var_name[1]))
             w_sig = var_name[1].split('/')[-1]
             l = darknet_ckpt.layers[l_idx]
             l.w[w_sig] = var.eval(self.sess)

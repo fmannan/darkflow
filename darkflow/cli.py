@@ -11,7 +11,8 @@ def cliHandler(args):
     def _get_dir(dirs):
         for d in dirs:
             this = os.path.abspath(os.path.join(os.path.curdir, d))
-            if not os.path.exists(this): os.makedirs(this)
+            if not os.path.exists(this):
+                os.makedirs(this)
     
     requiredDirectories = [FLAGS.imgdir, FLAGS.binary, FLAGS.backup, os.path.join(FLAGS.imgdir,'out')]
     if FLAGS.summary:
@@ -20,8 +21,10 @@ def cliHandler(args):
     _get_dir(requiredDirectories)
 
     # fix FLAGS.load to appropriate type
-    try: FLAGS.load = int(FLAGS.load)
-    except: pass
+    try:
+        FLAGS.load = int(FLAGS.load)
+    except:
+        pass
 
     tfnet = TFNet(FLAGS)
     
@@ -30,12 +33,19 @@ def cliHandler(args):
         exit('Demo stopped, exit.')
 
     if FLAGS.train:
-        print('Enter training ...'); tfnet.train()
+        print('Enter training ...')
+        tfnet.train()
         if not FLAGS.savepb: 
             exit('Training finished, exit.')
 
     if FLAGS.savepb:
         print('Rebuild a constant version ...')
-        tfnet.savepb(); exit('Done')
+        tfnet.savepb()
+        exit('Done')
 
     tfnet.predict()
+
+
+if __name__ == '__main__':
+    import sys
+    cliHandler(sys.argv)
